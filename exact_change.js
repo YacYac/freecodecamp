@@ -1,5 +1,12 @@
 function checkCashRegister(price, cash, cid) {
   var change;
+  change = cash - price;
+
+  console.log("price: $", price.toFixed(2));
+  console.log("cash: $", cash.toFixed(2));
+  console.log("change: $", change.toFixed(2));
+  console.log("cid: ", cid);
+
   // Here is your change, ma'am.
   return change;
 }
