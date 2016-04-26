@@ -32,15 +32,21 @@ function setDivisor(denomination) {
   }
 }
 
-function checkCashRegister(price, cash, cid) {
-  var changeDue;
-  changeDue = cash - price;
-
+function checkChange(change) {
   var changeAvailable = 0;
 
-  for (var i = 0; i < cid.length; i++) {
-    changeAvailable += cid[i][1];
+  for (var i = 0; i < change.length; i++) {
+    changeAvailable += change[i][1];
   }
+
+  return changeAvailable;
+}
+
+function checkCashRegister(price, cash, cid) {
+  var change = [];
+  var changeDue = cash - price;
+
+  var changeAvailable = checkChange(cid);
 
   if (changeDue > changeAvailable) {
     console.log("Insufficient Funds");
@@ -50,34 +56,47 @@ function checkCashRegister(price, cash, cid) {
     return "Closed";
   } else {
     cid.reverse();
-    cid.forEach(function(denomination){
-      var divisor = setDivisor(denomination[0]);
-      // make sure section isn't empty
-      if ((denomination[1] / divisor) > 0) {
-        console.log("Checking the " + divisor + " drawer.");
-      }
-    });
     console.log("price: $", price.toFixed(2));
     console.log("cash: $", cash.toFixed(2));
     console.log("change available: $", changeAvailable.toFixed(2));
     console.log("change due: $", changeDue.toFixed(2));
     console.log("cid: ", cid);
-    return changeDue;
+    cid.forEach(function(denomination){
+      var divisor = setDivisor(denomination[0]);
+      // make sure section isn't empty
+      if ( (denomination[1] / divisor) > 0 && (changeDue / divisor) > 1 ) {
+        var denominationAvailable = denomination[1] / divisor;
+        var denominationNeeded = changeDue / divisor;
+
+        var denominationTaken;
+        if (denominationNeeded < denominationAvailable) {
+          denominationTaken = Math.floor(denominationNeeded);
+        } else {
+          denominationTaken = Math.floor(denominationAvailable);
+        }
+        var changeTaken = denominationTaken * divisor;
+        changeTaken = +changeTaken.toFixed(2);
+        console.log("change due: $" + changeDue);
+        console.log("Checking the " + divisor + " drawer.");
+        change.push([denomination[0], changeTaken]);
+        console.log("changeDue / divisor: " + (changeDue / divisor) );
+        console.log("change taken: " + changeTaken);
+        changeDue = changeDue - changeTaken;
+        changeDue = +changeDue.toFixed(2);
+      }
+    });
+
+    if (changeDue > 0) {
+      console.log("Insufficient Funds");
+      return "Insufficient Funds";
+    } else {
+      console.log(change);
+      return change;
+    }
   }
 }
 
-// Example cash-in-drawer array:
-// [["PENNY", 1.01],
-// ["NICKEL", 2.05],
-// ["DIME", 3.10],
-// ["QUARTER", 4.25],
-// ["ONE", 90.00],
-// ["FIVE", 55.00],
-// ["TEN", 20.00],
-// ["TWENTY", 60.00],
-// ["ONE HUNDRED", 100.00]]
-
-checkCashRegister(19.50, 20.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]);
+checkCashRegister(3.26, 100.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]);
 
 /*
 
