@@ -1,14 +1,29 @@
 function checkCashRegister(price, cash, cid) {
-  var change;
-  change = cash - price;
+  var changeDue;
+  changeDue = cash - price;
+
+  var changeAvailable = 0;
+
+  for (var i = 0; i < cid.length; i++) {
+    changeAvailable += cid[i][1];
+  }
+
+  if (changeDue > changeAvailable) {
+    console.log("Insufficient Funds");
+    return "Insufficient Funds";
+  } else if (changeDue === changeAvailable) {
+    console.log("Closed");
+    return "Closed";
+  }
 
   console.log("price: $", price.toFixed(2));
   console.log("cash: $", cash.toFixed(2));
-  console.log("change: $", change.toFixed(2));
+  console.log("change available: $", changeAvailable.toFixed(2));
+  console.log("change due: $", changeDue.toFixed(2));
   console.log("cid: ", cid);
 
   // Here is your change, ma'am.
-  return change;
+  return changeDue;
 }
 
 // Example cash-in-drawer array:
@@ -22,7 +37,7 @@ function checkCashRegister(price, cash, cid) {
 // ["TWENTY", 60.00],
 // ["ONE HUNDRED", 100.00]]
 
-checkCashRegister(19.50, 20.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]);
+checkCashRegister(19.50, 20.00, [["PENNY", 0.50], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]);
 
 /*
 
