@@ -1,14 +1,42 @@
 function updateInventory(arr1, arr2) {
     // All inventory must be accounted for or you're fired!
+
+    // Check for new items in the array
+    arr2.forEach(function(item, index, array){
+      var newItem = true;
+      arr1.forEach(function(comparisonItem, index, array){
+        if (item[1] === comparisonItem[1]) {
+          newItem = false;
+          comparisonItem[0] += item[0];
+        }
+      });
+
+      if (newItem) {
+        arr1.push(item);
+      }
+    });
+
+    // sort the array alphabetically
+    arr1.sort(function (a,b) {
+      if (a[1] > b[1]) {
+        return 1;
+      }
+      if (a[1] < b[1]) {
+        return -1;
+      }
+      return 0;
+    });
+
+    console.log(arr1);
     return arr1;
 }
 
 // Example inventory lists
 var curInv = [
+    [5, "Microphone"],
     [21, "Bowling Ball"],
-    [2, "Dirty Sock"],
     [1, "Hair Pin"],
-    [5, "Microphone"]
+    [2, "Dirty Sock"]
 ];
 
 var newInv = [
