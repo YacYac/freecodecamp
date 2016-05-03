@@ -29,7 +29,7 @@ function permAlone(str) {
   return str;
 }
 
-permAlone('aabb');
+permAlone('aaa');
 
 /*
 
