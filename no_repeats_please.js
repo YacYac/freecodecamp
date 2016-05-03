@@ -3,6 +3,7 @@ function permAlone(str) {
   var noRepeats = 0;
 
   //generate all permutations
+  //code for this from http://www.graemeboy.com/string-permutations
   function recPerm(rest, soFar) {
     var next = [];
     var remaining;
