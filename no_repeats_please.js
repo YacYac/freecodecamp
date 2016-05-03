@@ -1,4 +1,11 @@
 function permAlone(str) {
+  var perms;
+  var noRepeats;
+
+  //generate all permutations
+  //use regex to check permutations for repeats
+    //if no-repeat increase valid noRepeat count
+
   return str;
 }
 
