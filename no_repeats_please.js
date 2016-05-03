@@ -1,35 +1,55 @@
-var perms = [];
+function findPerms(str) {
+  var perms = [];
+  function recPerm(rest, soFar) {
+    var next = [];
+    var remaining;
 
-function recPerm(rest, soFar) {
-  var next = [];
-  var remaining;
+    if (rest === '') {
+      perms.push(soFar);
+    } else {
+      for (var i = 0; i < rest.length; i++) {
+        remaining = rest.substr(0,i) + rest.substr(i+1,rest.length-1);
+        next = soFar + rest[i];
 
-  if (rest == '') {
-    perms.push(soFar);
-  } else {
-    for (var i = 0; i < rest.length; i++) {
-      remaining = rest.substr(0,i) + rest.substr(i+1,rest.length-1);
-      next = soFar + rest[i];
-
-      recPerm(remaining, next);
+        recPerm(remaining, next);
+      }
     }
   }
+  recPerm(str,'');
+  return perms;
 }
+
 
 function permAlone(str) {
-  var noRepeats;
+  var perms = [];
+  var noRepeats = 0;
 
   //generate all permutations
-  recPerm(str, '');
-  //use regex to check permutations for repeats
+  perms = findPerms(str);
+  perms.forEach(function(perm){
+    var noRepeat = true;
+    for (var i = 0; i < perm.length; i++) {
+      //use regex to check permutations for repeats
+      var re = new RegExp(perm[i]+'{2,}','i');
+      if (perm.match(re)) {
+        noRepeat = false;
+      }
+    }
     //if no-repeat increase valid noRepeat count
+    if (noRepeat === true) {
+      noRepeats++;
+    }
+//    console.log(perm + ', ' + noRepeat);
+  });
 
-  console.log(perms);
-  console.log(perms.length);
-  return str;
+
+//  console.log(perms);
+//  console.log(perms.length);
+  console.log(noRepeats);
+  return noRepeats;
 }
 
-permAlone('aaa');
+permAlone('aab');
 
 /*
 
