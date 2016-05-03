@@ -1,15 +1,35 @@
+var perms = [];
+
+function recPerm(rest, soFar) {
+  var next = [];
+  var remaining;
+
+  if (rest == '') {
+    perms.push(soFar);
+  } else {
+    for (var i = 0; i < rest.length; i++) {
+      remaining = rest.substr(0,i) + rest.substr(i+1,rest.length-1);
+      next = soFar + rest[i];
+
+      recPerm(remaining, next);
+    }
+  }
+}
+
 function permAlone(str) {
-  var perms;
   var noRepeats;
 
   //generate all permutations
+  recPerm(str, '');
   //use regex to check permutations for repeats
     //if no-repeat increase valid noRepeat count
 
+  console.log(perms);
+  console.log(perms.length);
   return str;
 }
 
-permAlone('aab');
+permAlone('aabb');
 
 /*
 
