@@ -1,5 +1,8 @@
-function findPerms(str) {
+function permAlone(str) {
   var perms = [];
+  var noRepeats = 0;
+
+  //generate all permutations
   function recPerm(rest, soFar) {
     var next = [];
     var remaining;
@@ -16,16 +19,9 @@ function findPerms(str) {
     }
   }
   recPerm(str,'');
-  return perms;
-}
+ // console.log(perms);
 
-
-function permAlone(str) {
-  var perms = [];
-  var noRepeats = 0;
-
-  //generate all permutations
-  perms = findPerms(str);
+  //check all permutations for repeats
   perms.forEach(function(perm){
     var noRepeat = true;
     for (var i = 0; i < perm.length; i++) {
@@ -42,10 +38,7 @@ function permAlone(str) {
 //    console.log(perm + ', ' + noRepeat);
   });
 
-
-//  console.log(perms);
-//  console.log(perms.length);
-  console.log(noRepeats);
+  // console.log(noRepeats);
   return noRepeats;
 }
 
