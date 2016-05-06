@@ -1,43 +1,56 @@
 function makeFriendlyDates(arr) {
-  var date1 = arr[0].split('-');
-  var date2 = arr[1].split('-');
+  arr = arr.map(constructDate);
+
+  function constructDate(date) {
+    var currentDate = new Date();
+    dateArr = date.split('-');
+
+    var year = dateArr[0];
+    var month = parseInt(dateArr[1]) - 1;
+    var day = parseInt(dateArr[2]);
+    var hours = currentDate.getTimezoneOffset() / 60; //To account for UTC offset
+
+    date = new Date(Date.UTC(year, month, day, hours));
+
+    return date;
+  }
 
   function mapMonth(month) {
     switch (month) {
-      case '01':
+      case 0:
       month = 'January';
       break;
-      case '02':
+      case 1:
       month = 'February';
       break;
-      case '03':
+      case 2:
         month = 'March';
         break;
-      case '04':
+      case 3:
         month = 'April';
         break;
-      case '05':
+      case 4:
         month = 'May';
         break;
-      case '06':
+      case 5:
         month = 'June';
         break;
-      case '07':
+      case 6:
         month = 'July';
         break;
-      case '08':
+      case 7:
         month = 'August';
         break;
-      case '09':
+      case 8:
         month = 'September';
         break;
-      case '10':
+      case 9:
         month = 'October';
         break;
-      case '11':
+      case 10:
         month = 'November';
         break;
-      case '12':
+      case 11:
         month = 'December';
         break;
       default:
@@ -46,64 +59,74 @@ function makeFriendlyDates(arr) {
   }
 
   function mapDay(day) {
-    //strip leading zeroes
-    if (day.charAt(0) === '0') {
-      day = day.slice(1);
-    }
     switch (day) {
-      case '1':
-      case '21':
-      case '31':
-        day += 'st';
+      case 1:
+      case 21:
+      case 31:
+        day = day.toString() + 'st';
         break;
-      case '2':
-      case '22':
-        day += 'nd';
+      case 2:
+      case 22:
+        day = day.toString() + 'nd';
         break;
-      case '3':
-      case '23':
-        day += 'rd';
+      case 3:
+      case 23:
+        day = day.toString() + 'rd';
         break;
       default:
-        day += 'th';
+        day = day.toString() + 'th';
     }
     return day;
   }
 
-  function mapDates(item,index) {
-    switch (index) {
-      case 1:
-        item = mapMonth(item);
-        break;
-      case 2:
-        item = mapDay(item);
-        break;
-      default:
+  function mapDates(arr) {
+    var date1 = arr[0];
+    var date1NextYear = new Date(date1);
+    date1NextYear.setFullYear(date1.getFullYear() + 1);
+    // console.log(date1);
+    // console.log(date1NextYear);
+    var date1Str = "";
+    var date1YearStr = "";
+    var date1MonthStr = mapMonth(date1.getMonth()) + " ";
+    var date1DayStr = mapDay(date1.getDate());
+
+    var date2 = arr[1];
+    var date2Str = "";
+    var date2YearStr = "";
+    var date2MonthStr = "";
+    var date2DayStr = "";
+
+    var currentDate = new Date();
+    var nextYear = new Date();
+    nextYear.setFullYear(currentDate.getFullYear() + 1);
+
+    if (date1.getFullYear() > currentDate.getFullYear() || date2 > date1NextYear) {
+      date1YearStr = ", " + date1.getFullYear().toString();
     }
-    return item;
+    if (date2.getMonth() > date1.getMonth() || date2.getFullYear() > date1.getFullYear()) {
+      date2MonthStr = mapMonth(date2.getMonth()) + " ";
+    }
+    if (date2.getDate() !== date1.getDate() || date2.getMonth() !== date1.getMonth() || date2.getFullYear() !== date1.getFullYear()) {
+      date2DayStr = mapDay(date2.getDate());
+    }
+    if (date2 >= date1NextYear) {
+      date2YearStr = ", " + date2.getFullYear().toString();
+    }
+
+    date1Str = date1MonthStr + date1DayStr + date1YearStr;
+    date2Str = date2MonthStr + date2DayStr + date2YearStr;
+    if (date2Str === "") {
+      return [date1Str];
+    } else {
+      return [date1Str, date2Str];
+    }
   }
 
-  function finalizeDates(d1,d2) {
+  arr = mapDates(arr);
 
-    var d1Year = d1[0];
-    var d1Month = d1[1];
-    var d1Day = d1[2];
-    var d1Str = d1Month + " " + d1Day + ", " + d1Year;
+  // console.log(arr);
+  // console.log();
 
-    var d2Year = d2[0];
-    var d2Month = d2[1];
-    var d2Day = d2[2];
-    var d2Str = d2Month + " " + d2Day + ", " + d2Year;
-
-    return [d1Str, d2Str];
-  }
-
-  date1 = date1.map(mapDates);
-  date2 = date2.map(mapDates);
-
-  arr = finalizeDates(date1,date2);
-
-  console.log(arr);
   return arr;
 }
 
