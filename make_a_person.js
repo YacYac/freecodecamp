@@ -1,15 +1,36 @@
 var Person = function(firstAndLast) {
-  var nameArr = firstAndLast.split(' ');
-  console.log(nameArr);
-  var firstName;
-  var lastName;
-  var fullName = firstAndLast;
-
-  return firstAndLast;
+  var firstName, lastName, fullName;
+  this.getFirstName = function() {
+    return firstName;
+  };
+  this.getLastName = function() {
+    return lastName;
+  };
+  this.getFullName = function() {
+    return fullName;
+  };
+  this.setFirstName = function(first) {
+    firstName = first;
+    fullName = first + " " + lastName;
+  };
+  this.setLastName = function (last) {
+    lastName = last;
+    fullName = firstName + " " + last;
+  };
+  this.setFullName = function(firstAndLast) {
+    fullName = firstAndLast;
+    var nameArr = firstAndLast.split(' ');
+    firstName = nameArr[0];
+    lastName = nameArr[1];
+  };
+  this.setFullName(firstAndLast);
 };
 
 var bob = new Person('Bob Ross');
-bob.getFullName();
+console.log(Object.keys(bob).length);
+console.log(bob instanceof Person);
+console.log(bob.getFullName());
+console.log(bob.getFirstName());
 
 /*
 Make a Person
